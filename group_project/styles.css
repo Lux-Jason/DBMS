@@ -1,0 +1,143 @@
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* Header Styles */
+        header {
+            background-color: #f0f0f0;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin: 0 auto;
+        }
+        .button, .confirmbutton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .login-btn, .register-btn {
+            background-color: #28a745; 
+        }
+        .login-btn:hover, .register-btn:hover {
+            background-color: #28a730; 
+        }
+        .register-btn {
+            margin-left: 10px;
+        }
+        /* Main Content Styles */
+        .main-container {
+            display: flex;
+            flex-direction:inherit;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .login-container {
+            width: 30%;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .login-container h2 {
+            margin-top: 0;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"],
+        .login-container button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .login-container button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        /* Product Styles */
+        .products-container {
+            justify-content: center;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .product {
+            width: 300px;
+            margin: 12px;
+            display: inline-block;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .stock {
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .name-price {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .name {
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 16px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .actions button {
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .actions button img {
+            width: 30px;
+            height: 30px;
+        }
+
+        #advertisement1:hover {
+            opacity: 0.7;
+        }
+
+        button:hover {
+            background-color: #0090ff;
+        }

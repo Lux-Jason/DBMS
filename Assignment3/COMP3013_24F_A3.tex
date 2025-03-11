@@ -1,0 +1,251 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+
+\title{COMP3013 2024 Fall\\Assignment 3}
+\author{Qiao Yichang}
+\date{2024/12/13}
+
+\begin{document}
+	\maketitle
+	
+	\section*{Schema of the Database}
+	The schema of a database for public transportation companies is as follows. Keys are underlined.
+	
+	\begin{itemize}
+		\item \(company = (\underline{cID}, cname, address, phone)\)
+		\item \(route = (\underline{rID}, departure, arrival, cID)\)
+		\item \(vehicle = (\underline{plateNum}, model, capacity, manufacturer, cID)\)
+		\item \(driver = (\underline{dID}, name, gender, age, cID)\)
+		\item \(serve = (\underline{rID, plateNum})\)
+		\item \(drive = (\underline{plateNum}, dID)\)
+	\end{itemize}
+	
+	\noindent \textit{Notes:}
+	\begin{itemize}
+		\item \(cID\) is a foreign key to \(company.cID\).
+		\item \(rID\) is a foreign key to \(route.rID\).
+		\item \(plateNum\) is a foreign key to \(vehicle.plateNum\).
+		\item \(dID\) is a foreign key to \(driver.dID\).
+	\end{itemize}
+	
+	\section*{Q1.}
+	\begin{enumerate}
+		\item[(a)] Find the ID of routes which are not served by any vehicle. You must use subqueries.
+
+		\begin{verbatim}
+			SELECT rID 
+			FROM route 
+			WHERE rID NOT IN (SELECT rID FROM serve);
+		\end{verbatim}
+		
+		\item[(b)] Find the name of drivers who have served the route 69 (rID). You must use subqueries.
+
+		\begin{verbatim}
+			SELECT name 
+			FROM driver 
+			WHERE dID IN (
+			SELECT dID 
+			FROM drive 
+			WHERE plateNum IN (
+			SELECT plateNum 
+			FROM serve 
+			WHERE rID = 69
+			)
+			);
+		\end{verbatim}
+		
+		\item[(c)] Find the name of drivers who have driven all vehicles.
+
+		\begin{verbatim}
+			SELECT name 
+			FROM driver d 
+			WHERE NOT EXISTS (
+			SELECT plateNum 
+			FROM vehicle 
+			WHERE plateNum NOT IN (
+			SELECT plateNum 
+			FROM drive 
+			WHERE drive.dID = d.dID
+			)
+			);
+		\end{verbatim}
+		
+		\item[(d)] Find the plate number of vehicles which have served all routes operated by ``Xinhe'' (company name).
+
+		\begin{verbatim}
+			SELECT plateNum 
+			FROM vehicle v 
+			WHERE NOT EXISTS (
+			SELECT rID 
+			FROM route 
+			WHERE cID = (SELECT cID FROM company WHERE cname = 'Xinhe')
+			AND rID NOT IN (
+			SELECT rID 
+			FROM serve 
+			WHERE serve.plateNum = v.plateNum
+			)
+			);
+		\end{verbatim}
+		
+		\item[(e)] Implement constraints to guarantee the gender of a driver is either ``Male'' or ``Female'' and the age is from 20 to 60.
+
+		\begin{verbatim}
+			ALTER TABLE driver
+			ADD CONSTRAINT chk_gender CHECK (gender IN ('Male', 'Female'));
+			
+			ALTER TABLE driver
+			ADD CONSTRAINT chk_age CHECK (age BETWEEN 20 AND 60);
+		\end{verbatim}
+		
+	\end{enumerate}
+	
+	\section*{Q2.}
+Given an instance of a relational schema \( R = \{ A, B, C \} \) and the following table:
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{ccc}
+		\toprule
+		A & B & C \\
+		\midrule
+		1 & 2 & 2 \\
+		1 & 3 & 2 \\
+		1 & 4 & 2 \\
+		2 & 5 & 2 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Decide whether each of the following functional dependencies is satisfied by the instance:
+
+
+a) \( A \rightarrow B \): Does not hold. For \( A = 1 \), \( B \) has different values (2, 3, 4).
+
+b) \( A \rightarrow C \): Holds. For each \( A \), \( C \) is consistently 2.
+
+c) \( B \rightarrow A \): Holds. Each \( B \) value corresponds to a unique \( A \) value.
+
+d) \( B \rightarrow C \): Holds. For all \( B \) values, \( C \) is always 2.
+
+e) \( C \rightarrow A \): Does not hold. Same \( C \) (2) corresponds to different \( A \) values (1 and 2).
+
+f) \( C \rightarrow B \): Does not hold. Same \( C \) (2) corresponds to different \( B \) values (2, 3, 4, 5).
+
+g) \( AB \rightarrow C \): Holds. Each \( AB \) pair corresponds to \( C = 2 \).
+
+h) \( AC \rightarrow B \): Does not hold. Same \( AC \) (1,2) corresponds to different \( B \) values (2, 3, 4).
+
+i) \( BC \rightarrow A \): Holds. Each \( BC \) pair corresponds to a unique \( A \) value.
+
+	\section*{Q3.}
+\begin{itemize}
+	\item \( R = \{ A, B, C, D, E \} \)
+	\item \( F = \{ AB \rightarrow CD, BC \rightarrow DE, CD \rightarrow E, DE \rightarrow A \} \)
+\end{itemize}
+
+\begin{enumerate}
+	\def\labelenumi{\alph{enumi})}
+	
+	\item \textbf{Find all candidate keys of \( R \). (6 pt)}
+	
+Analyze:
+
+	To find the candidate keys, we compute the closure of various sets of attributes.
+	
+
+	\[
+	AB^+ = \{ A, B, C, D, E \}
+	\]
+	The closure of \( AB \) contains all the attributes in \( R \), so \( AB \) is a candidate key.
+	
+
+	Other smaller combinations of attributes do not contain all attributes in their closures, so \( AB \) is the only candidate key.
+	
+Answer:
+
+	The candidate key is \( AB \).
+	
+	\item \textbf{Decompose \( R \) into BCNF. Show the steps. (15 pt)}
+	
+
+	A relation is in BCNF if for every functional dependency \( X \rightarrow Y \), \( X \) is a superkey. Let's check each dependency:
+	
+	\begin{itemize}
+		\item \( AB \rightarrow CD \): \( AB \) is a superkey, so this satisfies BCNF.
+		\item \( BC \rightarrow DE \): \( BC \) is not a superkey, so this violates BCNF.
+	\end{itemize}
+	
+	Since \( BC \rightarrow DE \) violates BCNF, we need to decompose \( R \).
+	
+
+	\begin{itemize}
+		\item Create a relation for \( BC \rightarrow DE \): \( R_1(B, C, D, E) \).
+		\item Create a relation for the remaining attributes: \( R_2(A, B) \).
+	\end{itemize}
+	
+
+	\begin{itemize}
+		\item \( R_1(B, C, D, E) \) satisfies BCNF because \( BC \) is a superkey.
+		\item \( R_2(A, B) \) satisfies BCNF because \( AB \) is a superkey.
+	\end{itemize}
+	
+Answer:
+
+	 The BCNF decomposition is:
+	\[
+	R_1(B, C, D, E), \quad R_2(A, B)
+	\]
+	
+	\item \textbf{Does the BCNF decomposition in part b) preserve all functional dependencies? (4 pt)}
+	
+Answer:
+
+	The BCNF decomposition does not preserve all functional dependencies. Specifically, the following dependencies are not preserved:
+	\begin{itemize}
+		\item \( CD \rightarrow E \)
+		\item \( DE \rightarrow A \)
+	\end{itemize}
+	
+	These dependencies cannot be directly enforced in the decomposed relations.
+	
+	\item \textbf{Decompose \( R \) into 3NF. Show the steps. (15 pt)}
+	
+	A relation is in 3NF if for every functional dependency \( X \rightarrow Y \), at least one of the following holds:
+	\begin{enumerate}
+		\item \( X \) is a superkey, or
+		\item Every attribute in \( Y \) is a prime attribute (part of a candidate key).
+	\end{enumerate}
+	
+	Checking each dependency:
+	\begin{itemize}
+		\item \( AB \rightarrow CD \): Satisfied since \( AB \) is a superkey.
+		\item \( BC \rightarrow DE \): Violates 3NF because \( BC \) is not a superkey, and \( D \) and \( E \) are non-prime.
+		\item \( CD \rightarrow E \): Violates 3NF because \( CD \) is not a superkey, and \( E \) is non-prime.
+		\item \( DE \rightarrow A \): Violates 3NF because \( DE \) is not a superkey, and \( A \) is non-prime.
+	\end{itemize}
+
+	\begin{itemize}
+		\item Create a relation \( R_1(B, C, D, E) \) to handle \( BC \rightarrow DE \).
+		\item Create a relation \( R_2(C, D, E) \) to handle \( CD \rightarrow E \).
+		\item Create a relation \( R_3(D, E, A) \) to handle \( DE \rightarrow A \).
+	\end{itemize}
+	
+	\begin{itemize}
+		\item \( R_1(B, C, D, E) \) satisfies 3NF because \( BC \) is a superkey.
+		\item \( R_2(C, D, E) \) satisfies 3NF because \( CD \) is a superkey.
+		\item \( R_3(D, E, A) \) satisfies 3NF because \( DE \) is a superkey.
+	\end{itemize}
+	
+Answer:
+
+	\[
+	R_1(B, C, D, E), \quad R_2(C, D, E), \quad R_3(D, E, A)
+	\]
+	
+\end{enumerate}
+
+	
+\end{document}

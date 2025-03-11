@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{longtable}
+
+\begin{document}
+	
+	\title{COMP3013 Assignment Answers}
+	\author{Qiao Yichang}
+	\date{\today}
+	\maketitle
+	
+	
+	\section*{Q2: ER Diagram}
+	ER diagram:
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.25]{./diagram.jpg}
+		\caption{ER Diagram}
+	\end{figure}
+	
+	\section*{Q3: Execution Outcome of Queries}
+Given the following tables:
+
+\subsection*{Table 1: Student}
+\begin{tabular}{|c|c|c|}
+	\hline
+	sID & Name  & Age \\
+	\hline
+	101 & Alice & 19  \\
+	102 & Bob   & 18  \\
+	\hline
+\end{tabular}
+
+\subsection*{Table 2: Enroll}
+\begin{tabular}{|c|c|c|}
+	\hline
+	sID & course   & grade \\
+	\hline
+	101 & Database & 80    \\
+	102 & Database & 65    \\
+	\hline
+\end{tabular}
+
+\subsection*{Table 3: Comment}
+\begin{tabular}{|c|c|c|}
+	\hline
+	sID & course         & comment                 \\
+	\hline
+	101 & Database       & Only a joke             \\
+	102 & Discrete Math  & Excellent course         \\
+	\hline
+\end{tabular}
+
+\subsection*{a) Query:}
+\texttt{SELECT * FROM Enroll, Comment WHERE Enroll.course = Comment.course}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	sID & course   & grade & sID & course   & comment       \\
+	\hline
+	101 & Database & 80    & 101 & Database & Only a joke   \\
+	\hline
+\end{tabular}
+
+\subsection*{b) Query:}
+\texttt{SELECT * FROM Student NATURAL JOIN Enroll NATURAL JOIN Comment}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	sID & Name  & Age & course   & grade & comment       \\
+	\hline
+	101 & Alice & 19  & Database & 80    & Only a joke   \\
+	\hline
+\end{tabular}
+
+\subsection*{c) Query:}
+\texttt{SELECT * FROM Enroll NATURAL RIGHT OUTER JOIN Comment}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	sID & course & comment & sID & course & grade \\
+	\hline
+	101 & Database & Only a joke & 101 & Database & 80 \\
+	102 & Discrete Math & Excellent course & NULL & NULL & NULL \\
+	\hline
+\end{tabular}
+
+\subsection*{d) Query:}
+\texttt{SELECT sID, course FROM Enroll JOIN Comment}
+
+\begin{tabular}{|c|c|}
+	\hline
+	sID & course   \\
+	\hline
+	101 & Database \\
+	\hline
+\end{tabular}
+	
+\end{document}

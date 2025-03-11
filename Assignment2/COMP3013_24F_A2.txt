@@ -1,0 +1,73 @@
+COMP3013 2024 Fall
+
+Assignment 2
+
+Note: there is no requirement on ER diagram drawing. You are allowed to
+draw ER diagrams using any tool. But you need to make sure that your
+drawing is clear enough. TAs have rights to remove marks if your graph
+unreadable. Please do not try to challenge us.
+
+For the submission, please pack all files and convert them into **A**
+**SINGLE PDF FILE**. Rename the PDF file as COMP3013_24F_A2_XXXX, where
+XXXX is your student ID.
+
+Q1. Convert the following ER diagram into logical schemas. (30pt)
+
+![](media/image1.png){width="5.905511811023622in"
+height="3.625984251968504in"}
+
+The schema of a database for public transportation companies is as
+follows. Keys are underlined.
+
+-   $company = (\underline{cID},cname,address,phone)$
+
+-   $route = (\underline{rID},departure,arrival,cID)$
+
+// $cID$ is a foreign key to $company.cID$.
+
+-   $vehicle = (\underline{plateNum},model,capacity,manufacturer,cID)$
+
+// $cID$ is a foreign key to $company.cID$.
+
+-   $driver = (\underline{dID},name,\ gender,age,cID)$
+
+// $cID$ is a foreign key to $company.cID$.
+
+-   $serve = (\underline{rID,plateNum})$
+
+// $rID$ is a foreign key to $route.rID$.
+
+// $plateNum$ is a foreign key to $vehicle.plateNum$.
+
+-   $drive = (\underline{plateNum},dID)$
+
+// $dID$ is a foreign key to $diver.dID$.
+
+// $plateNum$ is a foreign key to $vehicle.plateNum$.
+
+Q2. Write a query for each following question. Assuming students' name
+and instructors' name are unique. (10pt for each)
+
+a)  Find the number of vehicles owned by "Xinhe" (company name).
+
+b)  Find the companies who owns more than 10 vehicles. Show the company
+    names and number of vehicles owned by each.
+
+c)  Find the route which is served by more vehicles than other routes.
+    Show the departure and the arrival of the route.
+
+d)  A driver retires at age 65 for males or at age 60 for females.
+    Remove retired drivers from the database.
+
+e)  The company "ZhuhaiGongjiao" (company name) opens a new route from
+    "UIC" (departure) to "Gongbei" (destination). The company will
+    assign any vehicle manufactured by "BYD" to the new route. Add
+    correct records to the database.
+
+Q3. Implement the above logical design in SQL. You need to select
+suitable data types and link foreign keys properly. (10 pt)
+
+Q4. The above schema is converted from an ER diagram which has
+$company$, $route$, $vechile$, and $driver$ as entity sets; $serve$ and
+$drive$ as relationship sets. What are the constraints on the two
+relationship sets? (10 pt)

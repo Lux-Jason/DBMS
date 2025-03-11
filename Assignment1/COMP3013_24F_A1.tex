@@ -1,0 +1,237 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+COMP3013 2024 Fall
+
+Assignment 1
+
+Note: there is no requirement on ER diagram drawing. You are allowed to
+draw ER diagrams using any tool. But you need to make sure that your
+drawing is clear enough. TAs have rights to remove marks if your graph
+unreadable. Please do not try to challenge us.
+
+For the submission, please pack your answers to Q2 and Q3 to \textbf{A}
+\textbf{SINGLE PDF FILE}. Rename the PDF file as
+COMP3013\_23F\_A1\_XXXX, where XXXX is your student ID. Answers of Q1
+are submitted via \textbf{iSpace Feedback}. Submissions which do not
+following the guideline may \textbf{not be marked}.
+
+Q1. The schema of a database is given as follows. Keys are underlined.
+
+\begin{itemize}
+\item
+  \(book = (\underline{bID},bname,year,author)\)
+\item
+  \(reviewer = (\underline{rID},rname)\)
+\item
+  \(rating = (\underline{rID,bID},score,date)\) //\(score\) is an
+  integer and \(1 \leq score \leq 5\)
+\item
+  \(comment = (\underline{rID,bID},content)\)
+\end{itemize}
+
+Write a query for each following question. Please submit your answers of
+this question via \textbf{iSpace Feedback}. (7 marks for each)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Find the name of books which are written by Kleene (author).
+\item
+  Find the name of books which have received a rating score less than 3.
+\item
+  Find the name of reviewers who have made a comment to book ``Quantum
+  Finance'' (book name).
+\item
+  Find the name of reviewers who have written some book.
+\item
+  Find the authors who have written multiple books.
+\item
+  Find the name of books which have been rated at both score 1 and score
+  5.
+\item
+  Can one reviewer rate a book multiple times? Why?
+\end{enumerate}
+
+Q2. Suppose you are a medical school student. You want to design an ER
+diagram to model illnesses, treatments, and medicines under the
+following assumptions. (35 marks)
+
+\begin{itemize}
+\item
+  Each illness is described as ID, name, and discoverer's name.
+\item
+  Every illness is associated with one or multiple cause(s).
+\item
+  Each cause is described as ID, name, and description.
+\item
+  Some causes are associated to one or multiple organ(s) to describe
+  where the causes happen.
+\item
+  Each organ is defined by ID, name, and body system.
+\item
+  Every illness is associated with one or multiple symptom(s). Each
+  association also describes how long the symptom occurs.
+\item
+  A symptom is defined by ID, name, and effect.
+\item
+  Each illness is treated by at most one treatment.
+\item
+  Each treatment is defined by ID, name, equipment, and method.
+\item
+  Each illness is given zero, one, or multiple medicine(s).
+\item
+  If a medicine is given to an illness, the quantity is modeled.
+\item
+  Each medicine is defined by ID, name, and ingredient.
+\end{itemize}
+
+You do not need to make more assumptions on your design.
+
+Q3. Given the tables, what is the execution outcome (including both
+table title and table content) of the following queries? (4 marks for
+each)
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\[sID\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[sname\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[age\]
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+101 & Alice & 19 \\
+102 & Bob & 18 \\
+\end{longtable}
+
+Table 1 Student
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\[sID\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[course\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[score\]
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+101 & Database & 80 \\
+102 & Database & 65 \\
+\end{longtable}
+
+Table 2 Enroll
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\[sID\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[course\]
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\[remark\]
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+101 & Database & Only a joke \\
+102 & Discrete Math & Excellent course \\
+\end{longtable}
+
+Table 3 Comment
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  SELECT * FROM Enroll, Comment WHERE Enroll.course = Comment.course
+\item
+  SELECT * FROM Student NATURAL JOIN Enroll NATURAL JOIN Comment
+\item
+  SELECT * FROM Enroll NATURAL RIGHT OUTER JOIN Comment
+\item
+  SELECT sID, course FROM Enroll JOIN Comment
+\end{enumerate}
+
+\end{document}

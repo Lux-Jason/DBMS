@@ -1,0 +1,58 @@
+Q1.
+	SELECT title 
+	FROM film,film_actor,actor 
+	WHERE 	actor.first_name='Zero' AND 
+			actor.last_name='Cage' AND 
+			actor.actor_id=film_actor.actor_id AND
+			film_actor.film_id=film.film_id;
+
+Q2.
+	SELECT 	film.title 
+	FROM 	film,inventory,rental,customer 
+	WHERE 	customer.first_name='George' AND 
+			customer.last_name='Linton' AND 
+			customer.customer_id=rental.customer_id AND 
+			rental.inventory_id=inventory.inventory_id AND 
+			inventory.film_id=film.film_id;
+
+Q3.
+	SELECT 	customer.first_name,customer.last_name 
+	FROM 	category,film_category,inventory,rental,customer 
+	WHERE 	category.name='action' AND
+			customer.customer_id=rental.customer_id AND 
+			rental.inventory_id=inventory.inventory_id AND 
+			inventory.film_id=film_category.film_id AND 
+			film_category.category_id=category.category_id;
+
+Q4.
+	SELECT 	customer.first_name,customer.last_name 
+	FROM 	country,city,address,customer,rental,inventory,film,language 
+	WHERE 	country.country='China' AND 
+			language.name='Japanese' AND 
+			country.country_id=city.country_id AND 
+			city.city_id=address.city_id AND
+			address.address_id=customer.address_id AND 
+			customer.customer_id=rental.customer_id AND 
+			rental.inventory_id=inventory.inventory_id AND 
+			inventory.film_id=film.film_id AND 
+			film.language_id=language.language_id;
+
+
+Q5.
+	SELECT 	c1.first_name,c1.last_name,c2.first_name,c2.last_name 
+	FROM 	inventory AS i1, inventory AS i2, rental AS r1, 
+			rental AS r2,customer AS c1,customer AS c2 
+	WHERE 	i1.film_id = i2.film_id AND 
+			i1.inventory_id = r1.inventory_id AND 
+			i2.inventory_id = r2.inventory_id AND 
+			r1.customer_id <> r2.customer_id AND 
+			r1.customer_id = c1.customer_id AND 
+			r2.customer_id = c2.customer_id;
+
+Q6.
+	SELECT 	a1.first_name,a1.last_name
+	FROM 	actor AS a1, actor AS a2, film_actor AS f1, film_actor AS f2
+	WHERE 	a2.last_name='Bolger' AND 
+			a2.actor_id=f2.actor_id AND 
+			f2.film_id=f1.film_id AND 
+			f1.actor_id=a1.actor_id;

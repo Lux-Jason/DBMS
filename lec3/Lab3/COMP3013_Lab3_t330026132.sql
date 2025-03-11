@@ -1,0 +1,83 @@
+
+-- 1. Find the films (name) played by Zero Cage.
+SELECT film.title
+FROM film
+JOIN film_actor ON film.film_id = film_actor.film_id
+JOIN actor ON actor.actor_id = film_actor.actor_id
+WHERE actor.first_name = 'Zero' AND actor.last_name = 'Cage';
+
+SELECT title
+FROM sakila.film, sakila.film_actor, sakila.actor
+WHERE actor.first_name='Zero' AND actor.last_name="Cage" AND actor.actor_id=film_actor.actor_id AND film_actor.film_id=film.film_id;
+
+-- 2. Find the films (name) rented by George Linton.
+SELECT film.title
+FROM sakila.rental
+JOIN sakila.inventory ON rental.inventory_id = inventory.inventory_id
+JOIN sakila.film ON inventory.film_id = film.film_id
+JOIN sakila.customer ON rental.customer_id = customer.customer_id
+WHERE customer.first_name = 'George' AND customer.last_name = 'Linton';
+
+SELECT film.title
+FROM sakila.rental, sakila.inventory, sakila.film, sakila.customer
+WHERE rental.inventory_id = inventory.inventory_id AND inventory.film_id = film.film_id AND rental.customer_id = customer.customer_id
+AND customer.first_name = 'George' AND customer.last_name = 'Linton';
+
+-- 3. Find the customers (name) who have rented some action (category) films.
+SELECT DISTINCT customer.first_name, customer.last_name
+FROM sakila.customer
+JOIN sakila.rental ON customer.customer_id = rental.customer_id
+JOIN sakila.inventory ON rental.inventory_id = inventory.inventory_id
+JOIN sakila.film ON inventory.film_id = film.film_id
+JOIN sakila.film_category ON film.film_id = film_category.film_id
+JOIN sakila.category ON film_category.category_id = category.category_id
+WHERE category.name = 'Action';
+
+SELECT DISTINCT customer.first_name, customer.last_name
+FROM sakila.customer, sakila.rental, sakila.inventory, sakila.film, sakila.film_category, sakila.category
+WHERE customer.customer_id = rental.customer_id AND rental.inventory_id = inventory.inventory_id AND inventory.film_id = film.film_id AND film.film_id = film_category.film_id
+AND film_category.category_id = category.category_id AND category.name = 'Action';
+
+-- 4. Find the customers who live in China and have rented some Japanese films.
+SELECT DISTINCT customer.first_name, customer.last_name
+FROM sakila.customer
+JOIN sakila.address ON customer.address_id = address.address_id
+JOIN sakila.city ON address.city_id = city.city_id
+JOIN sakila.country ON city.country_id = country.country_id
+JOIN sakila.rental ON customer.customer_id = rental.customer_id
+JOIN sakila.inventory ON rental.inventory_id = inventory.inventory_id
+JOIN sakila.film ON inventory.film_id = film.film_id
+JOIN sakila.film_category ON film.film_id = film_category.film_id
+JOIN sakila.category ON film_category.category_id = category.category_id
+WHERE country.country = 'China' AND category.name = 'Japanese';
+
+SELECT DISTINCT customer.first_name, customer.last_name
+FROM sakila.customer, sakila.address, sakila.city, sakila.country, sakila.rental, sakila.inventory, sakila.film, sakila.film_category, sakila.category
+Where customer.address_id = address.address_id AND address.city_id = city.city_id AND customer.customer_id = rental.customer_id AND inventory.film_id = film.film_id
+AND film.film_id = film_category.film_id AND film_category.category_id = category.category_id  AND country.country = 'China' AND category.name = 'Japanese';
+
+-- 5. Find all pairs of customers (name) who have rented a same film.
+SELECT c1.first_name AS customer1_first_name, c1.last_name AS customer1_last_name,
+       c2.first_name AS customer2_first_name, c2.last_name AS customer2_last_name
+FROM sakila.rental r1
+JOIN sakila.rental r2 ON r1.inventory_id = r2.inventory_id
+JOIN sakila.customer c1 ON r1.customer_id = c1.customer_id
+JOIN sakila.customer c2 ON r2.customer_id = c2.customer_id
+WHERE r1.customer_id <> r2.customer_id;
+
+SELECT c1.first_name AS customer1_first_name, c1.last_name AS customer1_last_name,
+       c2.first_name AS customer2_first_name, c2.last_name AS customer2_last_name
+FROM sakila.rental r1, sakila.rental r2, sakila. customer c1, sakila.customer c2
+Where r1.inventory_id = r2.inventory_id AND r1.customer_id = c1.customer_id AND r2.customer_id = c2.customer_id AND r1.customer_id <> r2.customer_id;
+
+-- 6. Find the actors who have played a same film with Bolger (the last name of an actor).
+SELECT DISTINCT a2.first_name, a2.last_name
+FROM sakila.film_actor fa1
+JOIN sakila.film_actor fa2 ON fa1.film_id = fa2.film_id
+JOIN sakila.actor a1 ON fa1.actor_id = a1.actor_id
+JOIN sakila.actor a2 ON fa2.actor_id = a2.actor_id
+WHERE a1.last_name = 'Bolger' AND a2.actor_id <> a1.actor_id;
+
+SELECT DISTINCT a2.first_name, a2.last_name
+FROM sakila.film_actor fa1, sakila.film_actor fa2, sakila.actor a1, sakila.actor a2
+WHERE fa1.film_id = fa2.film_id AND fa1.actor_id = a1.actor_id AND fa2.actor_id = a2.actor_id AND a1.last_name = 'Bolger' AND a2.actor_id <> a1.actor_id;

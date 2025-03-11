@@ -1,0 +1,59 @@
+--1.Calculate the average rental duration among all films.
+SELECT AVG(rental_duration) AS average_rental_duration
+FROM sakila.film;
+
+--2.Calculate the number of films rented by Norman Currier.
+SELECT COUNT(DISTINCT f.film_id) AS films_rented
+FROM sakila.customer c
+JOIN sakila.rental r USING (customer_id)
+JOIN sakila.inventory i USING (inventory_id)
+JOIN sakila.film f USING (film_id)
+WHERE c.first_name = 'Norman' AND c.last_name = 'Currier';
+
+--3.Calculate the number of films rented by each customer.
+SELECT CONCAT(c.first_name, " ", c.last_name) AS customer_name, COUNT(DISTINCT f.film_id) AS films_rented
+FROM sakila.customer c
+JOIN sakila.rental r ON c.customer_id = r.customer_id
+JOIN sakila.inventory i ON r.inventory_id = i.inventory_id
+JOIN sakila.film f ON i.film_id = f.film_id
+GROUP BY c.customer_id;
+
+--4.Calculate the number of films rented by each group of customers from the same country.
+SELECT country, COUNT(DISTINCT f.film_id) AS films_rented
+FROM sakila.customer
+JOIN sakila.address USING (address_id)
+JOIN sakila.city USING (city_id)
+JOIN sakila.country USING (country_id)
+JOIN sakila.rental USING (customer_id)
+JOIN sakila.inventory USING (inventory_id)
+JOIN sakila.film f USING (film_id)
+GROUP BY country;
+
+--5.Calculate the number of horror films rented by each group of customers from the same country.
+SELECT country, COUNT(DISTINCT film_id) AS horror_films_rented
+FROM sakila.customer c
+JOIN sakila.address USING (address_id)
+JOIN sakila.city USING (city_id)
+JOIN sakila.country USING (country_id)
+JOIN sakila.rental USING (customer_id)
+JOIN sakila.inventory USING (inventory_id)
+JOIN sakila.film USING (film_id)
+JOIN sakila.film_category USING (film_id)
+JOIN sakila.category cat USING (category_id)
+WHERE cat.name = 'Horror'
+GROUP BY country;
+
+--6.Find the countries which have some customers who have rented more than 4 horror films.
+SELECT co.country
+FROM sakila.customer c
+JOIN sakila.address a ON c.address_id = a.address_id
+JOIN sakila.city ci ON a.city_id = ci.city_id
+JOIN sakila.country co ON ci.country_id = co.country_id
+JOIN sakila.rental r ON c.customer_id = r.customer_id
+JOIN sakila.inventory i ON r.inventory_id = i.inventory_id
+JOIN sakila.film f ON i.film_id = f.film_id
+JOIN sakila.film_category fc ON f.film_id = fc.film_id
+JOIN sakila.category cat ON fc.category_id = cat.category_id
+WHERE cat.name = 'Horror'
+GROUP BY co.country, c.customer_id
+HAVING COUNT(DISTINCT f.film_id) > 4;

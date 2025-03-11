@@ -1,0 +1,17 @@
+Q1
+	SELECT * FROM actor WHERE first_name='Russell';
+
+Q2
+	SELECT * FROM actor WHERE first_name='Russell' AND last_name='Close';
+
+Q3
+	SELECT email FROM customer WHERE first_name='Harry' AND active=0;
+
+Q4
+	SELECT last_name, first_name FROM actor WHERE actor_id=99;
+
+Q5
+	SELECT title,special_features FROM film WHERE replacement_cost<20 AND rental_rate>4.0;
+
+Q6
+	SELECT customer_id FROM payment WHERE payment_date>='2005-05-25' AND payment_date<'2005-05-26' AND amount<=3;

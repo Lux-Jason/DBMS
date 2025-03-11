@@ -1,0 +1,49 @@
+-- 1.Which customer(s) has rented some films from all stores?
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c
+WHERE NOT EXISTS (
+    SELECT s.store_id
+    FROM store s
+    WHERE NOT EXISTS (
+        SELECT r.rental_id
+        FROM rental r
+        WHERE r.customer_id = c.customer_id
+          AND r.inventory_id IN (
+              SELECT i.inventory_id
+              FROM inventory i
+              WHERE i.store_id = s.store_id
+          )
+    )
+);
+
+-- 2.Which customer(s) has rented at least one film in every category?
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c
+WHERE NOT EXISTS (
+    SELECT cat.category_id
+    FROM category cat
+    WHERE NOT EXISTS (
+        SELECT r.rental_id
+        FROM rental r
+        JOIN inventory i ON r.inventory_id = i.inventory_id
+        JOIN film_category fc ON i.film_id = fc.film_id
+        WHERE fc.category_id = cat.category_id
+          AND r.customer_id = c.customer_id
+    )
+);
+
+
+-- 3.Which customer(s) has rented at least one film in each rating? Assume that every rating has at least one film. 
+SELECT c.customer_id, c.first_name, c.last_name
+FROM customer c
+WHERE NOT EXISTS (
+    SELECT DISTINCT f.rating
+    FROM film f
+    WHERE NOT EXISTS (
+        SELECT r.rental_id
+        FROM rental r
+        JOIN inventory i ON r.inventory_id = i.inventory_id
+        WHERE i.film_id = f.film_id
+          AND r.customer_id = c.customer_id
+    )
+);
